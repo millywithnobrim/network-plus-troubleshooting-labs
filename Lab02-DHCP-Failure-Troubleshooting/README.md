@@ -1,122 +1,78 @@
-Lab 02 – VLAN & DHCP Troubleshooting
-Scenario
+# Lab 02 – VLAN & DHCP Troubleshooting
 
-Two workstations connected to a switch are unable to obtain IP addresses and cannot communicate across VLANs.
-A router-on-a-stick configuration is partially implemented, but DHCP and VLAN assignments are misconfigured.
-Your task is to identify and correct the issues so both PCs receive IP addresses and inter-VLAN communication works.
+## Scenario
+Two workstations connected to a switch are unable to obtain IP addresses and cannot communicate across VLANs.  
+Your task is to **identify and correct misconfigurations** involving VLANs, trunking, router subinterfaces, and DHCP.  
+You must use **CLI verification tools** (e.g., `show vlan`, `show interfaces trunk`, `ipconfig`) to troubleshoot.
 
-You must use CLI verification tools (e.g., ping, ipconfig, show vlan, show interfaces trunk, show ip dhcp binding) to troubleshoot.
+---
 
-Objective
+## Objective
+- Practice identifying and fixing VLAN, trunking, and DHCP issues  
+- Reinforce understanding of inter-VLAN routing and subnetting  
+- Develop troubleshooting skills aligned with CompTIA Network+ objectives  
 
-Practice diagnosing VLAN and DHCP-related connectivity issues
+---
 
-Reinforce understanding of VLAN assignments, trunking, and router subinterfaces
+## CompTIA Network+ Objective Mapping
 
-Develop troubleshooting skills aligned with CompTIA Network+ objectives
+### Domain 1.0 – Networking Fundamentals
+- 1.4: Configure IPv4 addressing and subnet masks  
+- 1.8: Apply and configure VLANs  
 
-CompTIA Network+ Objective Mapping
-Domain 1.0 – Networking Fundamentals
+### Domain 2.0 – Network Implementations
+- 2.1: Configure switching components (VLANs, trunks)  
+- 2.2: Configure routing technologies (router-on-a-stick)  
 
-1.4: Configure IPv4 addressing and subnet masks
+### Domain 5.0 – Network Troubleshooting
+- 5.1: Troubleshoot common network service issues:  
+  - Incorrect VLAN assignment  
+  - Missing or incorrect trunking  
+  - Misconfigured DHCP pools  
+  - Incorrect router subinterface configuration  
+- 5.3: Use appropriate network diagnostic tools (`ping`, `show vlan`, `show ip interface brief`)  
 
-1.5: Compare and contrast network topologies and types
+---
 
-1.8: Configure and apply VLAN segmentation
+## Tasks
+1. Use the **Command Prompt** on each PC to gather IP configuration details (`ipconfig`).  
+2. Verify VLAN membership using `show vlan brief`.  
+3. Check trunk status using `show interfaces trunk`.  
+4. Inspect router subinterfaces and DHCP scopes.  
+5. Identify and correct the misconfiguration(s).  
+6. Verify both PCs obtain valid DHCP addresses.  
+7. Confirm inter-VLAN connectivity using `ping`.  
 
-Domain 2.0 – Network Implementations
+---
 
-2.1: Configure and troubleshoot switching concepts (VLANs, trunks)
+## Success Criteria
+- PC1 receives an IP in the **VLAN 10** subnet.  
+- PC2 receives an IP in the **VLAN 20** subnet.  
+- The switch trunk toward the router is operational.  
+- Router subinterfaces for each VLAN are correctly configured.  
+- Both PCs can ping their default gateways **and each other**.  
+- Grading checks (if using Packet Tracer Activity Wizard) pass.  
 
-2.2: Configure routing technologies (router-on-a-stick, subinterfaces)
+---
 
-Domain 3.0 – Network Operations
+## Restrictions
+- All troubleshooting and verification must be done using CLI tools.  
+- Desktop IP Configuration may be used only to verify DHCP operation.  
+- Other configuration tabs (Config, Physical) are locked.  
 
-3.1: Use appropriate documentation and diagrams
+---
 
-3.3: Apply interface and device monitoring tools
+## Recommended Commands
+- `ipconfig`  
+- `ping <IP>`  
+- `show vlan brief`  
+- `show interfaces trunk`  
+- `show ip interface brief`  
+- `show ip dhcp binding`  
 
-Domain 5.0 – Network Troubleshooting
+---
 
-5.1: Troubleshoot common network service issues:
-
-Incorrect VLAN assignment
-
-Missing/incorrect trunking
-
-Misconfigured DHCP pools
-
-Incorrect router subinterface settings
-
-5.3: Use appropriate network diagnostic tools (ping, ipconfig, show vlan, show ip interface brief)
-
-Tasks
-
-Use the Command Prompt on each PC to check IP addressing (ipconfig).
-
-Verify VLAN membership on the switch using show vlan brief.
-
-Check the trunk link using show interfaces trunk.
-
-Inspect router subinterfaces and DHCP configuration.
-
-Correct all misconfigurations (VLANs, trunking, DHCP, or subinterfaces).
-
-Ensure both PCs successfully obtain DHCP leases.
-
-Test inter-VLAN connectivity using ping.
-
-Success Criteria
-
-PC1 receives a DHCP address in VLAN 10 (192.168.10.0/24).
-
-PC2 receives a DHCP address in VLAN 20 (192.168.20.0/24).
-
-Router subinterfaces for VLAN 10 and VLAN 20 are correctly configured.
-
-Switch trunk to router is functioning.
-
-PC1 and PC2 can ping their gateways and each other.
-
-All Packet Tracer grading checks (if using a PKA) pass.
-
-Restrictions
-
-All troubleshooting must be done using CLI tools.
-
-Desktop IP Configuration may only be used to verify DHCP (not to configure VLANs).
-
-Config and Physical tabs are locked in the activity.
-
-You must use the terminal on all devices for all configuration steps.
-
-Recommended Commands
-PCs
-
-ipconfig
-
-ping <IP>
-
-Switch
-
-show vlan brief
-
-show interfaces trunk
-
-show ip interface brief
-
-Router
-
-show ip interface brief
-
-show run
-
-show ip dhcp binding
-
-show ip dhcp pool
-
-Notes
-
-This lab simulates a real-world troubleshooting situation where multiple small VLAN and DHCP issues combine to break network connectivity.
-Focus on understanding the root cause of each failure rather than simply applying commands.
-All tasks map directly to Network+ troubleshooting objectives.
+## Notes
+- This lab simulates a **real-world VLAN and DHCP troubleshooting scenario**.  
+- Focus on identifying *why* the failures occur, not only applying commands.  
+- All steps align with **Network+ troubleshooting objectives**.
