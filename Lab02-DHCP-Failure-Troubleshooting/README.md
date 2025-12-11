@@ -1,15 +1,15 @@
 # Lab 02 – VLAN & DHCP Troubleshooting
 
 ## Scenario
-Two workstations connected to a switch are unable to obtain IP addresses and cannot communicate across VLANs.  
+Two workstations connected to a switch are unable to obtain IP addresses and cannot communicate.  
 Your task is to **identify and correct misconfigurations** involving VLANs, trunking, router subinterfaces, and DHCP.  
 You must use **CLI verification tools** (e.g., `show vlan`, `show interfaces trunk`, `ipconfig`) to troubleshoot.
 
 ---
 
 ## Objective
-- Practice identifying and fixing VLAN, trunking, and DHCP issues  
-- Reinforce understanding of inter-VLAN routing and subnetting  
+- Practice identifying and fixing VLAN and DHCP issues  
+- Reinforce understanding of VLAN segmentation and IPv4 addressing  
 - Develop troubleshooting skills aligned with CompTIA Network+ objectives  
 
 ---
@@ -21,14 +21,14 @@ You must use **CLI verification tools** (e.g., `show vlan`, `show interfaces tru
 - 1.8: Apply and configure VLANs  
 
 ### Domain 2.0 – Network Implementations
-- 2.1: Configure switching components (VLANs, trunks)  
+- 2.1: Configure switching components (VLANs, access ports, trunks)  
 - 2.2: Configure routing technologies (router-on-a-stick)  
 
 ### Domain 5.0 – Network Troubleshooting
 - 5.1: Troubleshoot common network service issues:  
   - Incorrect VLAN assignment  
   - Missing or incorrect trunking  
-  - Misconfigured DHCP pools  
+  - Misconfigured DHCP pool  
   - Incorrect router subinterface configuration  
 - 5.3: Use appropriate network diagnostic tools (`ping`, `show vlan`, `show ip interface brief`)  
 
@@ -38,19 +38,18 @@ You must use **CLI verification tools** (e.g., `show vlan`, `show interfaces tru
 1. Use the **Command Prompt** on each PC to gather IP configuration details (`ipconfig`).  
 2. Verify VLAN membership using `show vlan brief`.  
 3. Check trunk status using `show interfaces trunk`.  
-4. Inspect router subinterfaces and DHCP scopes.  
+4. Inspect router subinterface and DHCP configuration for VLAN 10.  
 5. Identify and correct the misconfiguration(s).  
-6. Verify both PCs obtain valid DHCP addresses.  
-7. Confirm inter-VLAN connectivity using `ping`.  
+6. Verify the PC receives a valid DHCP address.  
+7. Confirm connectivity using `ping`.  
 
 ---
 
 ## Success Criteria
-- PC1 receives an IP in the **VLAN 10** subnet.  
-- PC2 receives an IP in the **VLAN 20** subnet.  
-- The switch trunk toward the router is operational.  
-- Router subinterfaces for each VLAN are correctly configured.  
-- Both PCs can ping their default gateways **and each other**.  
+- The PC receives an IP in the **VLAN 10** subnet.  
+- The switch trunk (if used) is operational.  
+- The router subinterface for VLAN 10 is correctly configured.  
+- The PC can ping its default gateway.  
 - Grading checks (if using Packet Tracer Activity Wizard) pass.  
 
 ---
@@ -74,5 +73,5 @@ You must use **CLI verification tools** (e.g., `show vlan`, `show interfaces tru
 
 ## Notes
 - This lab simulates a **real-world VLAN and DHCP troubleshooting scenario**.  
-- Focus on identifying *why* the failures occur, not only applying commands.  
+- Focus on identifying *why* VLAN 10 and DHCP are not functioning correctly.  
 - All steps align with **Network+ troubleshooting objectives**.
