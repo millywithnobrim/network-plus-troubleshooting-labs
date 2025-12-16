@@ -2,72 +2,110 @@
 
 ### Scenario
 
-PC0 cannot communicate.
-PC1 works normally.
+PC0 cannot communicate on the network.
+PC1 is a working reference host.
+
+PC0 is connected to a switch port with port security configured incorrectly, preventing network access.
 <br></br>
 
-#### Intentional faults:
+#### Intentional Faults
 
-- Port security enabled on PC0’s port
+- Port security enabled on interface Fa0/1 (PC0’s port)
 
-- Maximum MAC addresses = 1
+- Maximum MAC addresses set to 1
 
-- Sticky MAC not configured
+- Sticky MAC addressing not configured
 
-- Violation mode = shutdown
+- Violation mode set to shutdown
 
-- Interface is err-disabled
+- Interface Fa0/1 is err-disabled
+
+- DHCP traffic from PC0 is blocked, resulting in an APIPA address
 <br></br>
 
 ### Objective
 
-- Troubleshoot switch port security violations
+- Diagnose switch port security violations
 
-- Understand MAC address restrictions, sticky MAC, and violation modes
+- Understand MAC address restrictions and violation modes
 
-- Restore secure access and verify connectivity
+- Restore network access and renew DHCP
+
+- Apply structured troubleshooting methodology
 <br></br>
 
-#### Step 1: Verify Connectivity Failure
+#### Step 1: Verify Host IP Configuration
 
 On PC0:
 ```
-ipconfig
-ping <gateway>
+ipconfig /all
 ```
 
 Expected Finding:
-- No connectivity.
+- PC0 has a 169.254.x.x (APIPA) address.
+
+Concept:
+- APIPA indicates a failure to reach a DHCP server, often caused by Layer 2 issues.
 <br></br>
 
-#### Step 2: Inspect Port Security
+#### Step 2: Test Connectivity
+```
+ping <default-gateway>
+```
+
+Expected Result:
+- Ping fails.
+
+Concept:
+- Failure confirms the issue is not limited to PC-to-PC communication.
+<br></br>
+
+#### Step 3: Inspect Switch Interface Status
 
 On the switch:
 ```
+show interfaces status
+```
+
+Expected Finding:
+- Interface Fa0/1 (PC0) is disabled or err-disabled
+
+- Interface Fa0/2 (PC1) is operational
+
+Concept:
+- Port security violations can administratively shut down switch interfaces.
+<br></br>
+
+#### Step 4: Inspect Port Security Configuration
+```
 show port-security
 show port-security interface fa0/1
+```
+
+Expected Finding:
+- Violation count greater than zero
+
+- Violation mode set to shutdown
+
+Concept:
+Port security enforces MAC-based access control and can disable interfaces when violations occur.
+<br></br>
+
+#### Step 5: Inspect MAC Address Table
+```
 show mac address-table
 ```
 
 Expected Finding:
+- PC0’s MAC address is not allowed to forward traffic.
 
-- Interface shutdown due to violation
-
-- MAC address not allowed
+Concept:
+- If the MAC address is not permitted, frames are dropped at Layer 2.
 <br></br>
 
-#### Step 3: Correct Port Security
+#### Step 6: Correct the Port Security Issue
 
-Option A – Sticky MAC:
-```
-conf t
-interface fa0/1
- switchport port-security mac-address sticky
- shutdown
- no shutdown
-```
-
-Option B – Disable Port Security:
+Remove the misconfigured security feature and reset the interface:
 ```
 conf t
 interface fa0/1
@@ -77,35 +115,52 @@ interface fa0/1
 ```
 
 Concept:
-- Sticky MAC allows automatic learning of allowed MACs.
-- Err-disabled state must be cleared for connectivity.
+- Removing port security clears the violation and restores Layer 2 connectivity.
 <br></br>
 
-#### Step 4: Verify Connectivity
+#### Step 7: Renew DHCP Lease
+
+On PC0:
 ```
-ping PC1-IP
-ping default-gateway
-show mac address-table
-show port-security interface fa0/1
+ipconfig /release
+ipconfig /renew
 ```
+
+Expected Result:
+- PC0 receives a valid DHCP-assigned IPv4 address.
+
+Concept:
+- Packet Tracer does not automatically retry DHCP after a failure.
 <br></br>
 
+#### Step 8: Verify Connectivity
+```
+ipconfig
+ping <PC1-IP>
+ping <default-gateway>
+```
 
-### Success Criteria:
+Expected Result:
+- End-to-end connectivity is restored.
+<br></br>
 
-- PC0 can communicate with PC1 and default gateway
+### Success Criteria
 
-- Interface is active
+- PC0 no longer has an APIPA address
 
-- MAC address learned correctly
+- Switch interface Fa0/1 is operational
+
+- PC0 can communicate with PC1 and the default gateway
 
 - Packet Tracer grading checks pass
 <br></br>
 
 ### Notes
 
-- Err-disabled ≠ cable problem
+- APIPA is a symptom of blocked network access
 
-- Port security blocks traffic silently; must be corrected before Layer 3 works
+- Port security issues can silently prevent DHCP
 
-- Teaches real-world access-layer troubleshooting
+- DHCP renewal is required after restoring connectivity in Packet Tracer
+
+- This lab builds on concepts from Labs 1 and 2
