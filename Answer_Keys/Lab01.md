@@ -41,7 +41,7 @@ Disabled interfaces block traffic regardless of correct IP configuration.
 ```
 conf t 
 interface fa0/x 
-no shutdown (or no shut)
+no shutdown 
 ```
 
 Concept:
