@@ -2,10 +2,10 @@
 
 ### Scenario
 
-PC0 cannot communicate on the network.
+PC0 is unable to communicate on the network and receives an APIPA address.
 PC1 is a working reference host.
 
-PC0 is connected to a switch port with port security configured incorrectly, preventing network access.
+PC0 is connected to a switch port with port security enabled, but sticky MAC learning is missing, blocking DHCP traffic.
 <br></br>
 
 #### Intentional Faults
@@ -18,9 +18,11 @@ PC0 is connected to a switch port with port security configured incorrectly, pre
 
 - Violation mode set to shutdown
 
-- Interface Fa0/1 is err-disabled
+- PC0’s MAC address is not permitted on Fa0/1
 
 - DHCP traffic from PC0 is blocked, resulting in an APIPA address
+  
+- Interface Fa0/1 remains administratively up, but traffic is blocked by port security
 <br></br>
 
 ### Objective
@@ -43,21 +45,31 @@ ipconfig /all
 
 Expected Finding:
 - PC0 has a 169.254.x.x (APIPA) address.
+- No default gateway
 
 Concept:
 - APIPA indicates a failure to reach a DHCP server, often caused by Layer 2 issues.
 <br></br>
 
 #### Step 2: Test Connectivity
+On PC0:
+```
+ping <default-gateway>
+```
+Expected Result:
+- Ping fails.
+
+On PC1:
 ```
 ping <default-gateway>
 ```
 
 Expected Result:
-- Ping fails.
+- Ping suceeds.
 
 Concept:
-- Failure confirms the issue is not limited to PC-to-PC communication.
+- A working reference host confirms the network and DHCP server are operational.
+- Failure on PC0 isolates the problem to port security.
 <br></br>
 
 #### Step 3: Inspect Switch Interface Status
@@ -68,12 +80,10 @@ show interfaces status
 ```
 
 Expected Finding:
-- Interface Fa0/1 (PC0) is disabled or err-disabled
-
-- Interface Fa0/2 (PC1) is operational
+- Interface Fa0/1 (PC0) shows connected / up
 
 Concept:
-- Port security violations can administratively shut down switch interfaces.
+- An interface can be up while still blocking traffic due to security policies.
 <br></br>
 
 #### Step 4: Inspect Port Security Configuration
@@ -83,12 +93,16 @@ show port-security interface fa0/1
 ```
 
 Expected Finding:
-- Violation count greater than zero
+- Port security: enabled
 
-- Violation mode set to shutdown
+- Maximum MAC addresses: 1
+
+- Sticky MAC: disabled
+
+- Secure MAC count: 0
 
 Concept:
-Port security enforces MAC-based access control and can disable interfaces when violations occur.
+- Without sticky MAC enabled, the switch does not learn or permit PC0’s MAC address.
 <br></br>
 
 #### Step 5: Inspect MAC Address Table
@@ -100,22 +114,24 @@ Expected Finding:
 - PC0’s MAC address is not allowed to forward traffic.
 
 Concept:
-- If the MAC address is not permitted, frames are dropped at Layer 2.
+- Frames from unauthorized MAC addresses are dropped at Layer 2.
 <br></br>
 
 #### Step 6: Correct the Port Security Issue
 
-Remove the misconfigured security feature and reset the interface:
+Enable sticky MAC learning:
 ```
 conf t
 interface fa0/1
- no switchport port-security
- shutdown
- no shutdown
+switchport port-security mac-address sticky
+end
 ```
+Expected Finding:
+- PC0’s MAC address learned as secure sticky
+<br></br>
 
 Concept:
-- Removing port security clears the violation and restores Layer 2 connectivity.
+- Sticky MAC allows the switch to dynamically permit the connected host.
 <br></br>
 
 #### Step 7: Renew DHCP Lease
@@ -146,21 +162,27 @@ Expected Result:
 
 ### Success Criteria
 
-- PC0 no longer has an APIPA address
-
-- Switch interface Fa0/1 is operational
-
 - PC0 can communicate with PC1 and the default gateway
 
-- Packet Tracer grading checks pass
+- Sticky MAC is correctly learned on Fa0/1
+
+- Port security remains enabled and functional
+
+- Interface Fa0/1 is active (not err-disabled)
+
+- DHCP assigns a valid IPv4 address to PC0
+
+- Grading checks (if using Packet Tracer Activity Wizard) pass
 <br></br>
 
 ### Notes
 
-- APIPA is a symptom of blocked network access
+- Port security can block traffic without disabling a port
 
-- Port security issues can silently prevent DHCP
+- APIPA (169.254.x.x) indicates DHCP failure caused by Layer 2 access issues
 
-- DHCP renewal is required after restoring connectivity in Packet Tracer
+- Sticky MAC is required for dynamically permitting devices on secured ports
 
-- This lab builds on concepts from Labs 1 and 2
+- Always check the MAC address table when troubleshooting port security
+
+- Focus on why PC0 cannot communicate, not just on executing commands
