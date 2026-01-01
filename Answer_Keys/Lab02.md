@@ -11,6 +11,8 @@ PC1 is functioning normally.
 - PC0 in wrong VLAN or on a shutdown interface
 
 - DHCP broadcasts cannot reach the server
+
+-   DHCP default gateway does not match router G0/0
 <br></br>
 
 ### Objective
@@ -28,7 +30,6 @@ On PC0 and PC1:
 ```
 ipconfig /all
 ```
-
 
 Expected Finding:
 
@@ -48,7 +49,6 @@ show vlan brief
 show interfaces status
 ```
 
-
 Expected Finding:
 
 - PC0’s port may be in the wrong VLAN
@@ -65,10 +65,43 @@ interface fa0/1
  no shutdown
 ```
 
+Concept:
+- Correct VLAN placement is required for DHCP broadcasts to reach the router.
+<br></br>
+
+#### Step 4: Verify DHCP Pool Configuration
+
+On the router:
+```
+show run | section dhcp
+```
+Expected Finding:
+
+- DHCP pool has an incorrect default gateway.
+<br></br>
 
 Concept:
 - Correct VLAN placement is required for DHCP broadcasts to reach the router.
 <br></br>
+
+#### Step 5: Correct DHCP Default Gateway
+
+On the router:
+```
+conf t
+ip dhcp pool VLAN10
+no default-router 192.168.10.254
+default-router 192.168.10.1
+end
+```
+<br></br>
+
+Concept:
+- DHCP clients install the `default-router` value as their gateway.
+  
+- If it does not match G0/0, hosts may get an IP but cannot route traffic.
+<br></br>
+
 
 #### Step 4: Renew DHCP Lease
 
@@ -97,7 +130,6 @@ ping PC1-IP
 <br></br>
 
 ### Notes
-
-- APIPA ≠ bad NIC
-
-- Always check Layer 2 (VLAN, interfaces) before DHCP troubleshooting
+- APIPA ≠ bad NIC  
+- A working IP with a wrong gateway still breaks connectivity  
+- Always verify **Layer 2 (VLAN)** before **Layer 3 (DHCP/gateway)** 
