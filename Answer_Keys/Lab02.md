@@ -69,7 +69,27 @@ Concept:
 - Correct VLAN placement is required for DHCP broadcasts to reach the router.
 <br></br>
 
-#### Step 4: Verify DHCP Pool Configuration
+#### Step 4: Correct DHCP Excluded Addresses
+
+On the router:
+```
+conf t
+no ip dhcp excluded-address 192.168.10.1
+ip dhcp excluded-address 192.168.10.1 192.168.10.10
+end
+```
+<br></br>
+
+Expected Finding:
+
+- Router IP and infrastructure addresses are excluded from DHCP.
+<br></br>
+
+Concept:
+- DHCP must not assign the router’s gateway address.
+<br></br>
+
+#### Step 5: Verify DHCP Pool Configuration
 
 On the router:
 ```
@@ -84,26 +104,23 @@ Concept:
 - Correct VLAN placement is required for DHCP broadcasts to reach the router.
 <br></br>
 
-#### Step 5: Correct DHCP Default Gateway
-
+#### Step 6: Correct DHCP Pool Configuration
 On the router:
 ```
 conf t
 ip dhcp pool VLAN10
-no default-router 192.168.10.254
-default-router 192.168.10.1
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 8.8.8.8
 end
 ```
 <br></br>
 
 Concept:
-- DHCP clients install the `default-router` value as their gateway.
-  
-- If it does not match G0/0, hosts may get an IP but cannot route traffic.
+- DHCP does not automatically detect the gateway — it must be defined.
 <br></br>
 
-
-#### Step 4: Renew DHCP Lease
+#### Step 7: Renew DHCP Lease
 
 On PC0:
 ```
@@ -112,7 +129,7 @@ ipconfig /renew
 ```
 <br></br>
 
-#### Step 5: Verify Connectivity
+#### Step 8: Verify Connectivity
 ```
 ipconfig
 ping 192.168.10.1
@@ -126,10 +143,12 @@ ping PC1-IP
 
 - PC0 can ping the default gateway and PC1
 
+- VLAN and DHCP configurations are correct
+
 - Lab grading checks pass
 <br></br>
 
 ### Notes
-- APIPA ≠ bad NIC  
-- A working IP with a wrong gateway still breaks connectivity  
-- Always verify **Layer 2 (VLAN)** before **Layer 3 (DHCP/gateway)** 
+- APIPA ≠ bad NIC   
+- Always verify **Layer 2 (VLAN)** before **Layer 3 (DHCP/gateway)**
+- Always confirm gateway alignment between DHCP and router interfaces
