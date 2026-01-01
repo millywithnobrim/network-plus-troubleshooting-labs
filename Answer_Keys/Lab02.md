@@ -75,7 +75,7 @@ On the router:
 ```
 conf t
 no ip dhcp excluded-address 192.168.10.1
-ip dhcp excluded-address 192.168.10.1 192.168.10.10
+ip dhcp excluded-address 192.168.10.1 192.168.10.99
 end
 ```
 <br></br>
