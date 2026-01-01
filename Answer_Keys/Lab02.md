@@ -149,6 +149,8 @@ ping PC1-IP
 <br></br>
 
 ### Notes
-- APIPA ≠ bad NIC   
+- APIPA ≠ bad NIC
+  
 - Always verify **Layer 2 (VLAN)** before **Layer 3 (DHCP/gateway)**
+  
 - Always confirm gateway alignment between DHCP and router interfaces
