@@ -72,17 +72,19 @@ Test connectivity:
   </li>
   <li>
     Inspect Trunk Configuration (Switch → Router):
-    <p>The trunk link is on Fa0/3. <code>showinterfaces trunk</code></p>
+    <p>The trunk link is on Fa0/3 <code>showinterfaces trunk</code>.</p>
     <p>Verify: </p>
     <ul>
       <li>Interface is in <b>trunk mode</b></li>
       <li>VLANs <b>10 and 20</b> are explicitly allowed</li>
     </ul>
   </li>
-  <p><pre>Assessment Note:
+  <br>
+  <p>Assessment Note:
+    <br>
       Even if the switch states VLANs are allowed by default, you must           explicitly configure allowed VLANs for grading to pass.
-  </pre></p>
-  <li>Inspect Router-on-a-Stick Configuration</li>
+  </p>
+  <li>Inspect Router-on-a-Stick Configuration: </li>
     <p>On the router: <code>show running-config</code></p>
     <p>Verify:</p>
       <ul>
@@ -103,7 +105,7 @@ Test connectivity:
                ip address 192.168.20.1 255.255.255.0
          </code>
     </pre>
-  <li>Identify the Root Cause</li>
+  <li>Identify the Root Cause: </li>
   <p>Possible issues include:</p>
       <ul>
         <li>Access ports assigned to the wrong VLAN</li>
@@ -111,20 +113,20 @@ Test connectivity:
         <li>Missing or incorrect router subinterfaces</li>
         <li>Incorrect or missing DHCP pool configuration</li>
       </ul>
-  <li>Correct the Configuration</li>
+  <li>Correct the Configuration: </li>
   <p>Using CLI: </p>
    <ul>
         <li>Assign correct VLANs to PC access ports</li>
         <li>Configure Fa0/3 as a trunk and explicitly allow VLANs 10 and 20</li>
         <li>Correct router subinterfaces for VLAN 10 and VLAN 20</li>
       </ul>
-  <li>Renew DHCP (If Needed)</li>
+  <li>Renew DHCP (If Needed): </li>
     <p>If any PC shows an APIPA address (169.254.x.x): </p>
     <pre>
       <code>ipconfig /release</code>
       <code>ipconfig /renew</code>
     </pre>
-  <li>Verify Connectivity</li>
+  <li>Verify Connectivity: </li>
     <p>Successful completion means: </p>
    <ul>
         <li>PCs can ping their default gateways</li>
