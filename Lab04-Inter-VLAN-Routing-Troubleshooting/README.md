@@ -66,7 +66,7 @@ Test connectivity:
     </ul>
     <p>Expected VLAN placement:</p>
     <ul>
-      <li>PC0,PC1 = Vlan 10</li>
+      <li>PC0, PC1 = Vlan 10</li>
       <li>PC2 = Vlan 20</li>
     </ul>
   </li>
