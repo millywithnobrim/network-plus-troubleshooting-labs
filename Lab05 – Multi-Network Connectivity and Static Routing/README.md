@@ -34,12 +34,12 @@ Your task is to identify and correct missing static routes so that traffic can r
 ---
 
 ## Tasks
-1. Verify Physical Connectivity and Cable Types
-2. Verify Host Connectivity `ping`
+1. Verify Physical Connectivity and Cable Types.
+2. Verify Host Connectivity `ping`.
 3. Verify Router0 Routing Table `show ip route`.  
-4. Configure Router0 to reach the remote network via Router1 `ip route`
-5. Verify Router1 Return Path `ping`
-6. Configure Router1 so replies can reach the local network `ip route`
+4. Configure Router0 to reach the remote network via Router1 `ip route`.
+5. Verify Router1 Return Path `ping`.
+6. Configure Router1 so replies can reach the local network `ip route`.
 7. Verify End-to-End Connectivity `ping`.  
 
 ---
