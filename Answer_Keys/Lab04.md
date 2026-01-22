@@ -1,4 +1,4 @@
-# Lab 04 – Lab04-Inter-VLAN-Routing-Troubleshooting
+# Lab 04 - Inter-VLAN-Routing-Troubleshooting
 
 ### Scenario
 
